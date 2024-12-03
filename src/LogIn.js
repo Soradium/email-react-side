@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
+import { IsLoggedContext } from './App';
+import getSession from './LogInChecker';
 
 function getXsrfToken() {
     const cookies = document.cookie.split(';');
@@ -15,7 +17,10 @@ function getXsrfToken() {
 export default function SubmitForm() {
     const [CurrentData, setCurrentData] = useState();
     const [currentToken, setCurrentToken] = useState();
-
+    const {
+        isLoggedIn, 
+        ChangeLogInState
+    } = useContext(IsLoggedContext);
     function alertNameSurname(e) {
         e.preventDefault();
         const form = e.target;
@@ -24,9 +29,8 @@ export default function SubmitForm() {
         const usernameInput = formData.get("username");
         const passwordInput = formData.get("password");
         console.log(document.cookie.substring(10,1000));
-        // Get CSRF token from axios default headers
         axios({
-            withCredentials: true, // Make sure to send cookies
+            withCredentials: true, 
             method: 'post',
             url: 'http://localhost:8080/login', 
             headers:{
@@ -39,12 +43,17 @@ export default function SubmitForm() {
         })
         .then(function (response) {
             alert(response.statusText);
+            ChangeLogInState(1);
         })
         .catch(function (error) {
             alert(error);
         });
     }
-
+    if(getSession()) {
+        ChangeLogInState(1);
+        console.log(isLoggedIn + " LoginState");
+        return (<div></div>);
+    }
     return (
         <div>
             <form onSubmit={alertNameSurname}>
@@ -52,8 +61,7 @@ export default function SubmitForm() {
                 <input name="password" placeholder='password' />
                 <button type="submit">Submit</button>
             </form>
-            Current people available for fetching:
-            {CurrentData}
         </div>
     );
+    
 }
