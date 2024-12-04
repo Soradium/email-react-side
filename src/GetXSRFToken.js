@@ -1,16 +1,12 @@
-import axios from 'axios';
-
-export function getSession() {
+export default function getXsrfToken() {
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
-        console.log(cookie);
         const [name, value] = cookie.trim().split('=');
-        if (name === 'JSESSIONID') {
-            console.log("Current JSESSIONID = "+value);
+        if (name === 'XSRF-TOKEN') {
+            console.log("XSRF retrieved");
             return value; // Return the token value
         }
     }
-    console.log("No JSESSIONID yet");
+    console.log("XSRF not available");
     return null; // Return null if not found
-    
 }

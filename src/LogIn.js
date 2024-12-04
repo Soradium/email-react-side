@@ -1,34 +1,28 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { IsLoggedContext } from './App';
-import getSession from './LogInChecker';
+import { getSession } from './LogInChecker';
+import getXsrfToken from './GetXSRFToken';
+import { Link } from 'react-router-dom';
 
-function getXsrfToken() {
-    const cookies = document.cookie.split(';');
-    for (const cookie of cookies) {
-        const [name, value] = cookie.trim().split('=');
-        if (name === 'XSRF-TOKEN') {
-            return value; // Return the token value
-        }
-    }
-    return null; // Return null if not found
-}
-
-export default function SubmitForm() {
+export default function SignInForm(e) {
+    
     const [CurrentData, setCurrentData] = useState();
     const [currentToken, setCurrentToken] = useState();
     const {
         isLoggedIn, 
-        ChangeLogInState
+        changeLogInState
     } = useContext(IsLoggedContext);
-    function alertNameSurname(e) {
+    
+    function proceedNameSurname(e) {
+        
         e.preventDefault();
         const form = e.target;
         const formData = new FormData(form);
 
-        const usernameInput = formData.get("username");
+        const usernameInput = formData.get("email");
         const passwordInput = formData.get("password");
-        console.log(document.cookie.substring(10,1000));
+        
         axios({
             withCredentials: true, 
             method: 'post',
@@ -42,26 +36,27 @@ export default function SubmitForm() {
             }
         })
         .then(function (response) {
-            alert(response.statusText);
-            ChangeLogInState(1);
+            console.log("Successfully logged in")
+            changeLogInState(1);
         })
         .catch(function (error) {
             alert(error);
         });
     }
     if(getSession()) {
-        ChangeLogInState(1);
-        console.log(isLoggedIn + " LoginState");
-        return (<div></div>);
+        changeLogInState(1);
+        console.log("LoginState="+isLoggedIn);
+        return;
     }
     return (
         <div>
-            <form onSubmit={alertNameSurname}>
-                <input name="username" placeholder='username' />
-                <input name="password" placeholder='password' />
+            <form onSubmit={proceedNameSurname}>
+                <input name="email" placeholder='Your e-mail address' />
+                <input name="password" placeholder='Your password' />
                 <button type="submit">Submit</button>
             </form>
+            <Link to="/signup">Click me!</Link>
         </div>
     );
-    
 }
+
