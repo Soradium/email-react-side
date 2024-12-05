@@ -1,4 +1,4 @@
-export default function getXsrfToken() {
+export default function getXSRFToken() {
     const cookies = document.cookie.split(';');
     for (const cookie of cookies) {
         const [name, value] = cookie.trim().split('=');

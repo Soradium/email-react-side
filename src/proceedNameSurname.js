@@ -1,5 +1,4 @@
 import axios from 'axios';
-import getXsrfToken from './GetXSRFToken';
 export default function proceedNameSurname(e, changeLogInState) {
 
     const form = e.target;

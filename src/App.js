@@ -4,10 +4,12 @@ import RoutesList from './RoutesList.js';
 import LogIn from './LogIn.js';
 import axios from 'axios';
 import getXsrfToken from './GetXSRFToken.js';
-import { Route, Routes }from 'react-router-dom';
+import { Link, Route, Routes }from 'react-router-dom';
 import SignUp from './SignUp.js';
+import GetMessages from './GetMessages.js';
 
 export const IsLoggedContext = createContext(null);
+
 
 function App() {
 
@@ -54,7 +56,8 @@ function App() {
 } else {
     return (
       <div>
-        AAAAAAAS
+        <GetMessages/>
+        <Link to="/send_message">Write a message!</Link>
         <RoutesList/> 
       </div>
       
