@@ -8,7 +8,6 @@ import { Route, Routes }from 'react-router-dom';
 import SignUp from './SignUp.js';
 
 export const IsLoggedContext = createContext(null);
-export const RequiresReg = createContext(null);
 
 function App() {
 
