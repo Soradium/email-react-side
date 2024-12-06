@@ -49,11 +49,16 @@ export default function SignUp(e) {
         return;
     }
     return (
-        <div>
-            <form onSubmit={proceedNameSurname}>
-                <input name="email" placeholder='Your new e-mail address' />
-                <input name="password" placeholder='Your new password' />
-                <button type="submit">Create account</button>
+        <div className="card d-flex justify-content-center align-items-center" style={{ width: '25rem' }}>
+            <form  onSubmit={proceedNameSurname}>
+            <div className="input-group mb-3" style={{ width: '20rem', margin: '1rem' }}>
+                    <input name="email" className="form-control" placeholder='New e-mail address' />
+                    <span className="input-group-text" id="basic-addon2">@notamail.com</span>
+                </div>
+                <div className="input-group mb-3" style={{ width: '20rem', margin: '1rem' }}>
+                    <input name="password" className="form-control" placeholder='Your new password' />
+                </div>
+                <button className="btn btn-outline-secondary" style={{ margin: '1rem' }} type="submit">Create account</button>
             </form>
         </div>
     );

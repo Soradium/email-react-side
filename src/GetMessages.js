@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import getXSRFToken from "./GetXSRFToken";
 import axios from "axios";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 export default function GetMessages() {
   const [currentMessages, setCurrentMessages] = useState(null);
 
   useEffect(() => {
-    // Perform the axios call when the component mounts
+    document.body.style.overflow = 'hidden';
     axios({
       withCredentials: true,
       method: 'get',
@@ -31,6 +33,9 @@ export default function GetMessages() {
       }
       console.log(error.config);
     });
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
   }, []); // Empty dependency array ensures this only runs once when the component mounts
 
   if (currentMessages === null) {
@@ -38,16 +43,39 @@ export default function GetMessages() {
   }
 
   return (
+    <>
     <div>
-      <ul>
+      <div 
+        className="accordion overflow-y-auto" 
+        id="accordionExample" 
+        style={{ marginLeft: "1vw", width: "55vw", height: "60vh"}} // Height and overflow added
+      >
         {currentMessages.map((message, index) => (
-          <li key={index}>
-            <p><strong>Sender:</strong> {message.userSender}</p>
-            <p><strong>Receiver:</strong> {message.userReceiver}</p>
-            <p><strong>Content:</strong> {message.content}</p>
-          </li>
+          <div className="accordion-item" key={index}>
+            <h2 className="accordion-header" id={`heading-${index}`}>
+              <button 
+                className="accordion-button" 
+                type="button" 
+                data-bs-toggle="collapse" 
+                data-bs-target={`#collapse-${index}`} 
+                aria-expanded="false" 
+                aria-controls={`collapse-${index}`}>
+                <strong>From:</strong> {message.userSender}
+              </button>
+            </h2>
+            <div 
+              id={`collapse-${index}`} 
+              className="accordion-collapse collapse" 
+              aria-labelledby={`heading-${index}`}>
+              <div className="accordion-body text-wrap">
+                <strong>To: {message.userReceiver}</strong><br />
+                {message.content}
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
+    </>
   );
 }
